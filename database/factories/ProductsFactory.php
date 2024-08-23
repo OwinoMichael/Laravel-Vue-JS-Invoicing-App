@@ -2,18 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Counter;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Counter>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Products>
  */
-class CounterFactory extends Factory
+class ProductsFactory extends Factory
 {
-
-
-    protected $model = Counter::class;
-
     /**
      * Define the model's default state.
      *
@@ -22,9 +17,9 @@ class CounterFactory extends Factory
     public function definition(): array
     {
         return [
-            'key'=> 'invoice',
-            'prefix' => 'INV-',
-            'value' => 20000
+            'item_code' => 'IC-1000'.rand(10, 500),
+            'description' => 'Name of Product'.rand(10, 500),
+            'unit_price' => mt_rand(100, 1000)
         ];
     }
 }
