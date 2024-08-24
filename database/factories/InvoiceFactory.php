@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
+use Database\Factories\Helpers\FactoryHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,7 @@ class InvoiceFactory extends Factory
     {
         return [
             'number' => $this->faker->numberBetween(10, 1000),
-            'customer_id' => $this->faker->numberBetween(1, 50),
+            'customer_id' => FactoryHelper::getRandModelId(Customer::class),
             'date' => $this->faker->date,
             'due_date' => $this->faker->date,
             'reference' => 'REF-'.rand(10, 500),
