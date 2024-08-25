@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
+use App\Models\Counter;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -36,6 +37,42 @@ class InvoiceController extends Controller
         } else {
              return $this->get_all_invoice();
         }
+     }
+
+     public function create_invoice(Request $request){
+        $counter = Counter::where('key', 'invoice')->first();
+        $random = Counter::where('key', 'invoice')->first();
+
+        $invoice = Invoice::orderBy('id', 'DESC')->first();
+        if($invoice){
+            $invoice = $invoice->id+1;
+            $counters = $counter->value + $invoice;
+        }else{
+            $counters = $counter->value;
+        }
+
+        $formData = [
+                    'number' => $counter->prefix.$counter,
+                    'customer_id' => null,
+                    'date' => date('Y-m-d'),
+                    'due_date' => null,
+                    'reference' => null,
+                    'discount' => 0,
+                    'terms_and_conditions' => 'Default Terms and Conditions',
+                    'items' => [
+                        [
+                            'product_id' => null,
+                            'product' => null,
+                            'unit_price' => 0,
+                            'quantity' => 0,
+                        ]
+                    ]
+
+                ];
+
+        return new JsonResponse($formData);
+
+
      }
 
 
