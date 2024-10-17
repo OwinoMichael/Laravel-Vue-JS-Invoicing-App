@@ -1,6 +1,9 @@
 <script setup>
 
+    import axios from "axios";
     import { onMounted, ref } from "vue"
+    import { stringifyQuery } from "vue-router";
+import router from "../../router";
 
     let form = ref([])
     let allcustomers = ref([])
@@ -52,9 +55,54 @@
 
     const getproducts = async () => {
         let response = await axios.get('/api/products')
-        console.log('products', response);
+        // console.log('products', response);
         listproducts.value = response.data.products
 
+    }
+
+    const removeItem = (i) => {
+        listCart.value.splice(i, 1)
+    }
+
+    const SubTotal = () => {
+        let total = 0
+        listCart.value.map((data)=> {
+            total = total + (data.quantity*data.unit_price)
+        })
+
+        return total
+    }
+
+    const Total = () => {
+        return SubTotal() - form.value.discount
+    }
+
+    const onSave = () => {
+        if(listCart.value.length>=1){
+            let subtotal = 0
+            subtotal = SubTotal()
+
+            let total = 0
+            total = Total()
+
+            const formData = new FormData()
+            formData.append('invoice_item', JSON.stringify(listCart.value))
+            formData.append('customer_id', customer_id.value)
+            formData.append('date', form.value.date)
+            formData.append('due_date', form.value.due_date)
+            formData.append('number', form.value.number)
+            formData.append('reference', form.value.reference)
+            formData.append('discount', form.value.discount)
+            formData.append('subtotal', subtotal)
+            formData.append('total', total)
+            formData.append('terms_and_conditions', form.value.terms_and_conditions)
+
+
+
+            axios.post("/api/add_invoice", formData)
+            listCart.value = []
+            router.push('/')
+        }
     }
 
 
@@ -120,7 +168,7 @@
                         $ {{ (itemcart.quantity)*(itemcart.unit_price) }}
                     </p>
                     <p v-else></p>
-                    <p style="color: red; font-size: 24px;cursor: pointer;">
+                    <p style="color: red; font-size: 24px;cursor: pointer;" @click="removeItem(i)">
                         &times;
                     </p>
                 </div>
@@ -134,20 +182,20 @@
             <div class="table__footer">
                 <div class="document-footer" >
                     <p>Terms and Conditions</p>
-                    <textarea cols="50" rows="7" class="textarea" ></textarea>
+                    <textarea cols="50" rows="7" class="textarea" v-model="form.terms_and_conditions"></textarea>
                 </div>
                 <div>
                     <div class="table__footer--subtotal">
                         <p>Sub Total</p>
-                        <span>$ 1000</span>
+                        <span>$ {{SubTotal()}}</span>
                     </div>
                     <div class="table__footer--discount">
                         <p>Discount</p>
-                        <input type="text" class="input">
+                        <input type="text" class="input" v-model="form.discount">
                     </div>
                     <div class="table__footer--total">
                         <p>Grand Total</p>
-                        <span>$ 1200</span>
+                        <span>$ {{Total()}}</span>
                     </div>
                 </div>
             </div>
@@ -159,7 +207,7 @@
 
             </div>
             <div>
-                <a class="btn btn-secondary">
+                <a class="btn btn-secondary" @click="onSave()">
                     Save
                 </a>
             </div>
