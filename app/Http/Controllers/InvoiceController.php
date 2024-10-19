@@ -105,6 +105,15 @@ class InvoiceController extends Controller
 
     }
 
+    public function show_invoice($id){
+       $invoice = Invoice::with(['customer'])->find($id);
+       return new JsonResponse([
+        'invoice' => $invoice
+       ], 200);  
+    }
+
+    
+
 //     public function index()
 //     {
 //         //

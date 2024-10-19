@@ -1,3 +1,29 @@
+<script setup>
+    import axios from "axios";
+    import { onMounted, ref } from 'vue';
+
+    let form = ref({id:'' })
+
+    const props = defineProps({
+        id:{
+            type:String,
+            default: ''
+        }
+    })
+
+    onMounted(async () => {
+       getInvoice() 
+    })
+
+    const getInvoice = async () => {
+        let response = await axios.get(`/api/show_invoice/${props.id}`)
+        console.log('form', response.data.invoice)
+        form.value = response.data.invoice;
+    }
+
+    
+</script>
+
 <template>
    <div class="container">
     <!--==================== SHOW INVOICE ====================-->
@@ -13,8 +39,8 @@
         </div>
         <div>
             <div class="card__header--title ">
-                <h1 class="mr-2">#1043</h1>
-                <p>July 17, 2020 at 3:28 am </p>
+                <h1 class="mr-2">#{{ form.id }}</h1>
+                <p>{{ form.created_at }}</p>
             </div>
     
             <div>
@@ -62,24 +88,29 @@
             <div class="invoice__header--item">
                 <div>
                     <h2>Invoice To:</h2>
-                    <p>Customer 1</p>
+                    <p v-if="form.customer">
+                        {{ form.customer.firstname }}
+                    </p>
+                    <p v-else>
+                        
+                    </p>
                 </div>
                 <div>
                         <div class="invoice__header--item1">
                             <p>Invoice#</p>
-                            <span>#1200</span>
+                            <span>#{{ form.number }}</span>
                         </div>
                         <div class="invoice__header--item2">
                             <p>Date</p>
-                            <span>12/12/2022</span>
+                            <span>{{ form.date }}</span>
                         </div>
                         <div class="invoice__header--item2">
                             <p>Due Date</p>
-                            <span>12/12/2022</span>
+                            <span>{{ form.due_date }}</span>
                         </div>
                         <div class="invoice__header--item2">
                             <p>Reference</p>
-                            <span>1045</span>
+                            <span>{{ form.reference }}</span>
                         </div>
                     
                 </div>
@@ -103,57 +134,7 @@
                     <p>1</p>
                     <p>$ 300</p>
                 </div>
-                <div class="table--items3">
-                    <p class="table--items--col2">
-                        2
-                    </p>
-                    <p  class="table--items--col1 table--items--transactionId3">
-                        Lorem Ipsum is simply dummy text 
-                    </p>
-                    <p class="table--items--col2">
-                        $ 300
-                    </p>
-                    <p class="table--items--col3">
-                        1
-                    </p>
-                    <p class="table--items--col5">
-                        $ 300
-                    </p>
-                </div>
-                <div class="table--items3">
-                    <p class="table--items--col2">
-                        3
-                    </p>
-                    <p  class="table--items--col1 table--items--transactionId3">
-                        Lorem Ipsum is simply dummy text 
-                    </p>
-                    <p class="table--items--col2">
-                        $ 300
-                    </p>
-                    <p class="table--items--col3">
-                        1
-                    </p>
-                    <p class="table--items--col5">
-                        $ 300
-                    </p>
-                </div>
-                <div class="table--items3">
-                    <p class="table--items--col2">
-                        4
-                    </p>
-                    <p  class="table--items--col1 table--items--transactionId3">
-                        Lorem Ipsum is simply dummy text 
-                    </p>
-                    <p class="table--items--col2">
-                        $ 300
-                    </p>
-                    <p class="table--items--col3">
-                        1
-                    </p>
-                    <p class="table--items--col5">
-                        $ 300
-                    </p>
-                </div>
+                
             </div>
 
             <div  class="invoice__subtotal">
