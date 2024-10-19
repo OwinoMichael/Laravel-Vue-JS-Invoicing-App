@@ -37,6 +37,10 @@
         router.push('/invoice/new')
     }
 
+    const onShow = (id) => {
+        router.push('/invoice/show/'+id)
+    }
+
 </script>
 <template>
     <div class="container">
@@ -98,7 +102,9 @@
 
                 <!-- item 1 -->
                 <div class="table--items" v-for="item in invoices" :key="item.id" v-if="typeof invoices !== 'undefined' && typeof invoices === 'object' && Object.keys(invoices).length > 0">
-                    <a href="#" class="table--items--transactionId">#{{item.id}}</a>
+                    <a href="#" @click="onShow(item.id)" class="table--items--transactionId">
+                        #{{item.id}}
+                    </a>
                     <p>{{item.date}}</p>
                     <p>#{{item.number}}</p>
                     <p>{{item.customer.firstname}} {{item.customer.lastname}}</p>
