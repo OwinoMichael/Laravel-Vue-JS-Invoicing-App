@@ -119,6 +119,48 @@ class InvoiceController extends Controller
        ], 200); 
     }
 
+    public function delete_invoice_items($id){
+        $invoiceitem = InvoiceItem::findorFail($id);
+        $invoiceitem->delete();
+    }
+
+    public function update_invoice(Request $request, $id){
+        $invoice = Invoice::where('id', $id)->first();
+
+        $invoice->sub_total = $request->subtotal;
+        $invoice->total = $request->total;
+        $invoice->customer_id = $request->customer_id;
+        $invoice->number = $request->number;
+        $invoice->date = $request->date;
+        $invoice->due_date = $request->due_date;
+        $invoice->discount = $request->discount;
+        $invoice->reference = $request->reference;
+        $invoice->terms_and_conditions = $request->terms_and_conditions;
+
+        $invoice->update($request->all());
+
+        $invoiceitem = $request->input("invoice_item");
+
+        $invoice->invoice_items()->delete();
+
+        foreach(json_decode($invoiceitem) as $item){
+            $itemsdata['product_id'] = $item->product_id;
+            $itemsdata['invoice_id'] = $invoice->id;
+            $itemsdata['quantity'] = $invoice->id;
+            $itemsdata['unit_price'] = $invoice->id;
+            $itemsdata['invoice_id'] = $invoice->id;
+
+            InvoiceItem::create($itemsdata);
+        }
+
+    }
+
+    public function delete_invoice($id){
+        $invoice = Invoice::findorFail($id);
+        $invoice->invoice_items()->delete();
+        $invoice->delete();
+    }
+
     
 
 //     public function index()

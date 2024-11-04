@@ -3,8 +3,10 @@
     import axios from "axios";
     import { onMounted, ref } from "vue"
     import { stringifyQuery } from "vue-router";
-import router from "../../router";
+    import { useRouter } from 'vue-router';
 
+    const router = useRouter();
+    
     let form = ref([])
     let allcustomers = ref([])
     let customer_id = ref([])

@@ -34,6 +34,11 @@
         router.push('/invoice/edit/'+id)
     }
 
+    const deleteinvoice = (id) => {
+        axios.get('/api/delete_invoice'+id)
+        router.push('/')
+    }
+
     
 </script>
 
@@ -76,7 +81,7 @@
                     </li>
                     <li>
                         <!-- Select Btn Option -->
-                        <button class="selectBtnFlat ">
+                        <button class="selectBtnFlat " @click="deleteinvoice(form.id)">
                             <i class=" fas fa-pencil-alt"></i>
                             Delete
                         </button>
