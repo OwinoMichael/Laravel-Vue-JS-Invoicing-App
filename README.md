@@ -24,3 +24,7 @@ CI/CD: GitHub Actions, Jenkins
 Containerization: Docker
 
 # How to Run
+
+git clone https://github.com/yourusername/vue-invoicing-system.git  
+cd vue-invoicing-system  
+docker-compose up  
