@@ -12,10 +12,15 @@ A full-stack invoicing system built with Laravel PHP & Vue.js, featuring automat
 
 # Technologies Used
 Frontend: Vue.js
+
 Backend: Laravel PHP
+
 Security: OAuth, JWT, RBAC, SSL over HTTP
+
 Database: MongoDB (Optimized with indexing)
+
 CI/CD: GitHub Actions, Jenkins
+
 Containerization: Docker
 
 # How to Run
